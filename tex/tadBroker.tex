@@ -1,0 +1,161 @@
+\begin{tad}{\tadNombre{Broker}}
+\tadIgualdadObservacional{c}{c'}{broker}{}
+
+\tadParametrosFormales{
+    \tadEncabezadoInline{g\'eneros}{}
+}
+
+\tadGeneros{}
+\tadExporta{}
+\tadUsa{\tadNombre{Bool, Nat}}
+
+\tadAlinearFunciones{CambiarCotizacion}{nombre /n, cotizaci\'on, broker /b}
+
+\tadObservadores
+\tadOperacion{t\'itulos}{broker}{conj(t\'itulo)}{}
+\tadOperacion{promesas}{cliente, broker}{conj(promesas)}{}
+\tadOperacion{clientes}{broker}{conj(clientes)}{}
+% Aca en el drive devuelve "cantidad"
+\tadOperacion{acciones}{cliente /c,nombre /n, broker /b}{nat}{est\'aDefinido($n$,t\'itulos($b$)) $\land$ $c$ $\in$ clientes($b$)} 
+
+%----------------------------------------------------
+% Generadores 
+%----------------------------------------------------
+\tadGeneradores
+\tadOperacion{nuevo}{conj(t\'itulo) /ts, conj(cliente) /cs}{broker}{$\neg$Vac\'io?($cs$) $\land$ noHayNombresRepetidos($ts$)}
+\tadOperacion{CambiarCotizaci\'on}{nombre /n, cotizaci\'on, broker /b}{broker}{est\'aDefinido($n$,t\'itulos($b$))}
+\tadOperacion{AgPromesa}{cliente /c, promesa /p, broker /b}{broker}{$c$ $\in$ clientes($b$) $\land$ est\'aDefinido(
+nombre(p),t\'itulos($b$)) $ \yluego$ 
+cantidad($p$) $\leq$ m\'aximo(nombre($p$), $c$) $\land$ $\neg$HayPromMismoTipo(nombre($p$),promesas($c$,$b$))) $ \yluego$ (vende?($p$) $\implies$ puedeVender?($c$,$p$,$b$))}
+\tadOperacion{AgT\'itulo}{t\'itulo /t,broker /b}{broker}{$\neg$($t$ $\in$ t\'itulos($t$))}
+
+%----------------------------------------------------
+% Otras Operaciones
+%----------------------------------------------------
+\tadOtrasOperaciones
+\tadAlinearFunciones{accDpsDeComprasDeOtros}{cliente /c, conj(promesa) /ps, nombre, cotizaci\'on, nat}
+\tadOperacion{enAlza}{nombre /n, broker /b}{bool}{est\'aDefinido($n$,t\'itulos($b$))}
+\tadOperacion{HayPromMismoTipo}{promesa /p, conj(promesa) /ps, t\'itulo /t}{bool}{}
+\tadOperacion{cumplirPromesas}{cliente /c, conj(promesa) /ps, nombre, cotizaci\'on, nat, broker /b}{conj(promesa)}{}
+\tadOperacion{dameM\'aximo}{nombre,conj(t\'itulo)}{nat}{}
+\tadOperacion{accionesLibres}{t\'itulo /t, broker /b}{nat}{} %Drive dice que devuelve acciones
+\tadOperacion{accionesTomadas}{nombre, conj(cliente), broker}{nat}{}%Drive dice que devuelve acciones
+\tadOperacion{cumplirVentas}{conj(promesa), nombre, cotizaci\'on}{conj(promesa)}{}
+\tadOperacion{ExisteVenta}{promesa, nombre, cotizaci\'on}{bool}{}
+\tadOperacion{accLibresDpsVenta}{conj(cliente),nombre,cotizaci\'on,nat,broker}{nat}{}
+\tadOperacion{Vendi\'oAcciones}{conj(promesa),nombre,cotizaci\'on}{bool}{}
+\tadOperacion{nuevasAccLibres}{conj(promesa),nombre,cotizaci\'on}{nat}{}
+\tadOperacion{cumplirCompras}{cliente, conj(promesa),t\'itulo, cotizaci\'on, conj(clientes), acciones, broker}{conj(promesas)}{}
+% Revisar si esta bien el nombre en el resto del documento
+\tadOperacion{accDspDeComprasDeOtros}{conj(promesa),nombre,cotizaci\'on,nat}{nat}{}
+\tadOperacion{promDspDeVerSiCompro}{conj(promesa),nombre,cotizaci\'on,nat}{conj(promesa)}{}
+\tadOperacion{puedeVender?}{cliente /c, promesa /p, broker /b}{bool}{}
+\tadOperacion{est\'aDef?}{nombre, conj(t\'itulo)}{bool}{}
+
+
+\newpage
+\tadAxiomas %[\paratodo{broker}{c, d}, \paratodo{$\alpha$}{a, b}]
+\tadAlinearAxiomas{accDspDeComprasDeOtros($ps$,$n$,$ct$,$a$)}
+%---------------------------------------------------------------------
+%Axiomas de Promesas
+%---------------------------------------------------------------------
+\tadAxioma{promesas($c$,nuevo($ts$,$cs$)}{$\emptyset$}
+\tadAxioma{promesas($c$,AgPromesa($c_1$,$p$,$b$))}{\IF seCumple($p$,$b$) THEN promesas($c$,$b$) ELSE {\IF $c = c_1$ THEN Ag(p,promesas($c$,$b$))
+ELSE promesas($c$,$b$) FI}FI}
+\tadAxioma{promesas($c$,cambiarCot($n$,$ct$,$b$))}{cumplirPromesas($c$,promesas($c$,$b$),$n$,$ct$, accionesLibres($n$,$b$),$b$))}
+%---------------------------------------------------------------------
+%Axiomas de Titulos
+%---------------------------------------------------------------------
+\tadAxioma{t\'itulos(nuevo($ts$,$cs$))}{$ts$}
+\tadAxioma{t\'itulos(AgT\'itulo($t$,$b$))}{Ag($t$,t\'itulos($b$))}
+\tadAxioma{t\'itulos(cambiarCot($n$,$ct$,$b$))}{t\'ituloNuevaCot($n$,$ct$,t\'itulos($b$))}
+
+%---------------------------------------------------------------------
+%Axiomas de Clientes
+%---------------------------------------------------------------------
+\tadAxioma{clientes(nuevo($ts$,$cs$))}{$cs$}
+\tadAxioma{clientes(cambiarCot($n$,$ct$,$b$))}{clientes($b$)}
+\tadAxioma{clientes(AgPromesa($c$,$p$,$b$))}{clientes($b$)}
+\tadAxioma{clientes(AgT\'itulo($t$,$b$))}{clientes($b$)}
+
+%---------------------------------------------------------------------
+%Axiomas de acciones
+%---------------------------------------------------------------------
+\tadAxioma{acciones($c$,$t$,nuevo($ts$,$cs$))}{0}
+% Se le pasan muchos argumentos a la funcion afectando la est?tica
+\tadAxioma{acciones($c$,$t$,CambiarCot($n$,$ct$,$b$))}{\IF $t = n$ THEN accionesDpsDeCompra($c$,$n$, promesas($c$,$t$,$b$), clientes($b$),\\
+ accClienteDspVenta( acciones($c$,$t$,$b$), promesas($c$,$t$,$b$),$n$,$ct$),\\ accionesLibresDspVenta (clientes($b$),$n$,$ct$,accionesLibres($n$,$b$),$b$),$b$) ELSE acciones($c$,$t$,$b$) FI}
+
+
+% REVISAR ESTA AXIOMATIZACION
+\tadAxioma{acciones($c$,$n$,AgPromesa($c_1$,$p$,$b$))}{\IF $c = c_1$ $\land$ seCumple($p$,$b$) THEN {\IF vende?($p$) THEN acciones($c$,$n$,$b$) - cantidad($p$) ELSE acciones($c$,$n$,$b$) + cantidad($p$) FI } ELSE acciones($c$,$n$,$b$) FI }
+
+
+%---------------------------------------------------------------------
+%Axiomas Otras Operaciones
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+% Otras Funciones que se utilizan en las restricciones de AgPromesa
+%---------------------------------------------------------------------
+\tadAxioma{puedeVender?($c$,$p$,$b$)}{cantidad($p$) $\leq$ acciones($c$,nombre($p$),$b$)}
+\tadAxioma{HayPromMismoTipo($p$,$ps$)}{\IF (vac\'io?($ps$) THEN false ELSE {\IF vende?(dameUno($ps$))=vende?($p$) $\land$ \\ nombre(dameUno($ps$))=nombre($p$) THEN true ELSE HayPromMismoTipo($p$,sinUno($ps$))FI} FI}
+\tadAxioma{est\'aDefinido($n$,$ts$)}{\IF vac\'io?($ts$) THEN false ELSE {\IF nombre(dameUno($ts$))= $n$) THEN true ELSE 
+est\'aDefinido($n$,sinUno($ts$)) FI}FI}
+%--------------------------------------------------------------------
+
+\tadAxioma{seCumple($p$,$b$)}{\IF vende?($p$) THEN dameCotizaci\'on(nombre($p$),t\'itulos($b$)) $\textless$ l\'imite($p$) ELSE dameCotizaci\'on(nombre($p$),t\'itulos($b$)) $\textgreater$ l\'imite($p$) FI }
+
+\tadAxioma{dameCotizaci\'on($n$,$ts$)}{\IF nombre(dameUno($ts$)) = $n$ THEN cotizaci\'on(dameUno($ts$)) ELSE dameCotizaci\'on($n$,sinUno($ts$)) FI}
+
+\tadAxioma{accionesLibres($n$,$b$)}{dameM\'aximo($n$,t\'itulos($b$)) - accionesTomadas($n$,clientes($b$),b)}
+
+\tadAxioma{dameM\'aximo($n$,$ts$)}{\IF nombre(dameUno($ts$)) = $n$ THEN m\'aximo(dameUno($ts$)) ELSE dameM\'aximo($n$,sinUno($ts$)) FI}
+
+\tadAxioma{accionesTomadas($n$,$cs$,$b$)}{\IF (vac\'io?($cs$) THEN 0 ELSE acciones(dameUno($cs$),$n$,$b$) + accionesTomadas($n$,sinUno($cs$),$b$) FI}
+
+\tadAxioma{cumplirPromesas($c$,$ps$,$t$,$ct$,$a$,$b$)}{cumplirCompras($c$,cumplirVentas($ps$,$t$,$ct$), $t$, $ct$, clientes($b$),\\(accionesLibresDespVenta(clientes($b$),$t$,$ct$,$a$,$b$),$b$)}
+
+% Duda: ct va entre {} ?
+\tadAxioma{cumplirVentas($ps$,$n$,$ct$)}{\IF vac\'io?($ps$) THEN $\emptyset$ ELSE {\IF existeVenta(dameUno($ps$),$n$,$ct$) THEN $ps$ ELSE Ag(dameUno($ps$),cumplirVentas(sinUno($ps$),$n$,$ct$)) FI} FI}
+
+\tadAxioma{existeVenta($p$,$n$,$ct$)}{vende?($p$) $\land$ nombre($p$) = $n$ $\land$ l\'imite($p$) $\textless$ $ct$}
+
+\tadAxioma{accLibresDspVenta($cs$,$n$,$ct$,$a$,$b$)}{\IF vac\'io?($cs$) THEN $a$ ELSE {\IF vendi\'oAcciones(promesas(dameUno($cs$), $b$), $n$, $ct$) THEN 
+nuevasAccionesLibres(promesas(dameUno($cs$),$b$), $n$,$c$) +\\ accionesLibresDspVenta(sinUno($cs$),$n$,$ct$,$a$,$b$) ELSE accionesLibresDspVenta($p$,sinUno($cs$),$n$,$c$,$a$) FI} FI}
+
+\tadAxioma{vendi\'oAcciones($ps$,$n$,$ct$)}{\IF vac\'io($ps$) THEN false ELSE {\IF vende?(dameUno($p$)) $\land$ nombre(dameUno($ps$)) = $n$ $\land$ \\ 
+l\'imite(dameUno($ps$)) $\textless$ $ct$ THEN true ELSE vendi\'oAcciones(sinUno($ps$),$n$,$ct$) FI} FI}
+
+\tadAxioma{nuevasAccLibres($ps$,$n$,$c$)}{\IF vac\'io($ps$) THEN 0 ELSE {\IF vende?(dameUno($ps$)) $\land$ nombre(dameUno($ps$)) = $n$ $\land$ \\ 
+l\'imite(dameUno($ps$)) $\textless$ $c$ THEN cantidad(dameUno($ps$)) ELSE nuevasAccionesLibres(sinUno($p$),$n$,$c$) FI} FI}
+
+\tadAxioma{cumplirCompras($c$,$ps$,$t$,$ct$,$cs$,$a$,$b$)}{\IF dameUno($cs$) = $c$ THEN promDspDeVerSiCompro($ps$,$t$,$ct$,$a$) ELSE 
+cumplirCompras($c$,$ps$,$t$,$ct$,sinUno($cs$),\\ accDspDeComprasDeOtros(promesas(dameUno($cs$),$b$),$t$,$ct$,$a$),$b$) FI}
+
+\tadAxioma{accDspDeComprasDeOtros($ps$,$n$,$ct$,$a$)}{\IF vac\'io?($ps$) THEN $a$ ELSE {\IF vende?(dameUno($ps$)) $\land$ nombre(dameUno($ps$)) = $n$ $\land$ 
+l\'imite(dameUno($ps$)) $\textless$ $c$ THEN $a$ - cantidad($p$) ELSE accDspDeComprasDeOtros(sinUno($p$),$n$,$ct$,$a$) FI} FI}
+
+\tadAxioma{promDspDeVerSiCompro($ps$,$n$,$ct$,$a$)}{\IF vac\'io?($ps$) THEN $\emptyset$ ELSE {\IF $\neg$vende?(dameUno($ps$)) $\land$ nombre(dameUno($ps$)) = $n$ $\land$ 
+l\'imite(dameUno($ps$)) $\textless$ $c$ $\land$  $a \geq$ cantidad(dameUno($p$)) THEN sinUno($ps$) ELSE 
+Ag(dameUno($ps$),promDspDeVerSiCompro(sinUno($ps$),$n$,$ct$,$a$)) FI} FI}
+
+% TituloNuevaCot 
+%-----------------
+%Se usa en la axiomatizacion del observador titulos
+\tadAxioma{t\'ituloNuevaCot($n$,$ct$,$ts$)}{\IF nombre(dameUno($ts$)) = $n$ THEN Ag(cambiarValor($ct$,dameUno($ts$)),sinUno($ts$)) ELSE Ag(dameUno($ts$),t\'ituloNuevaCot($n$,$ct$,sinUno($ts$)) FI}
+
+% Funciones utilizadas en axiomatizacion del obs Acciones
+%----------------------------------------------------------
+% AccionesClienteDspVenta
+\tadAxioma{accClienteDspVenta($a$,$ps$,$n$,$ct$)}{\IF vac\'io?($ps$) THEN $a$ ELSE {\IF existeVenta(dameUno($ps$),$t$,$ct$) THEN $a$ - cantidad(dameUno($ps$)) ELSE accClienteDspVenta($a$,sinUno($ps$),$n$,$ct$) FI} FI}
+
+\tadAxioma{accDspDeCompras($c$,$n$,$ps$,$cs$,$a$,$av$,$b$)}{\IF dameUno($cs$) = $c$ THEN 
+accClienteDspCompra($ps$,$t$,$ct$,$a$,$av$) ELSE accDspDeCompras($c$,$n$,$ps$,sinUno($cs$),$ct$,
+accDspDeComprasDeOtros(promesas(dameUno($cs$),$b$),$t$,$ct$,$av$),$b$) FI}
+
+\tadAxioma{accClienteDspCompra($ps$,$n$,$ct$,$a$,$av$)}{\IF vac\'io($ps$) THEN $a$ ELSE 
+{\IF $\neg$vende?(dameUno($ps$)) $\land$ nombre(dameUno($ps$)) = $n$ $\land$ l\'imite(dameUno($ps$)) $\textless$ $c$
+$\land$ $av$ $\leq$ cantidad(dameUno($ps$)) THEN $a$ + cantidad(dameUno($ps$)) ELSE promDspDeVerSiCompro(sinUno($ps$), $n$,$ct$,$a$,$av$)FI} FI}
+
+
+\end{tad}

@@ -1,0 +1,42 @@
+\begin{tad}{\tadNombre{T\'itulo}}
+\tadIgualdadObservacional{c}{c'}{t\'itulo}{}
+
+\tadParametrosFormales{
+    \tadEncabezadoInline{g\'eneros}{}
+}
+
+\tadGeneros{}
+\tadExporta{}
+\tadUsa{\tadNombre{Bool, Nat}}
+
+\tadAlinearFunciones{CambiarValor}{nombre, cotizaci\'on, m\'aximo}
+
+%----------------------------------------------------
+% Observadores 
+%----------------------------------------------------
+\tadObservadores
+%Hay que aclarar que: Nombre es renombre de string
+\tadOperacion{nombre}{t\'itulo}{string}{}
+\tadOperacion{m\'aximo}{t\'itulo}{nat}{}
+\tadOperacion{cotizaci\'on}{t\'itulo}{nat}{}
+\tadOperacion{enAlza}{t\'itulo}{nat}{}
+%----------------------------------------------------
+% Generadores 
+%----------------------------------------------------
+\tadGeneradores
+\tadOperacion{nuevo}{nombre, cotizaci\'on, m\'aximo}{t\'itulo}{}
+\tadOperacion{cambiarValor}{valor, t\'itulo}{t\'itulo}{}
+%----------------------------------------------------
+% AXIOMAS
+%----------------------------------------------------
+\tadAxiomas %[\paratodo{broker}{c, d}, \paratodo{$\alpha$}{a, b}]
+\tadAlinearAxiomas{cotizaci\'on(cambiarValor($v$,$t$))}
+
+\tadAxioma{nombre(nueva($n$,$m$,$c$)))}{$n$}
+\tadAxioma{m\'aximo(nueva($n$,$m$,$c$)))}{$m$}
+\tadAxioma{cotizaci\'on(nueva($n$,$m$,$c$))}{$c$}
+\tadAxioma{cotizaci\'on(cambiarValor($v$,$t$))}{$v$}
+\tadAxioma{enAlza(nueva($n$,$m$,$c$))}{true}
+\tadAxioma{enAlza(cambiarValor($v$,$t$))}{cotizaci\'on($t$) $\textless$ $v$}
+
+\end{tad}

@@ -1,0 +1,47 @@
+\begin{tad}{\tadNombre{Promesa}}
+\tadIgualdadObservacional{c}{c'}{promesa}{}
+
+\tadParametrosFormales{
+    \tadEncabezadoInline{g\'eneros}{}
+}
+
+\tadGeneros{}
+\tadExporta{}
+\tadUsa{\tadNombre{Bool, Nat}}
+
+\tadAlinearFunciones{cantidad }{l\'imite, t\'itulo, bool, nat ,cliente}
+
+%----------------------------------------------------
+% Observadores 
+%----------------------------------------------------
+\tadObservadores
+\tadOperacion{l\'imite}{promesa}{nat}{}
+%Habria que aclarar que nombre es renombre de string
+%l?mite es nat, cant es nat
+
+\tadOperacion{nombre}{promesa}{nombre}{}
+\tadOperacion{vende?}{promesa}{bool}{}
+\tadOperacion{cantidad}{promesa}{nat}{} 
+% Lo agregamos para la igualdad observacional y poder distinguir
+% Si por ejemplo, 2 personas tratan de comprar lo mismo, con las mismas condiciones
+% El conjunto los absorveria en uno, y eso estaria mal
+%\tadOperacion{cliente}{promesa}{nat}{} 
+
+%----------------------------------------------------
+% Generadores 
+%----------------------------------------------------
+\tadGeneradores
+%Ese bool es para el observador vende?
+\tadOperacion{nueva}{l\'imite, t\'itulo, bool, nat}{promesa}{}
+%----------------------------------------------------
+% AXIOMAS
+%----------------------------------------------------
+\tadAxiomas %[\paratodo{broker}{c, d}, \paratodo{$\alpha$}{a, b}]
+\tadAlinearAxiomas{cantidad(nueva($l$,$t$,$v$,$a$))}
+\tadAxioma{l\'imite(nueva($l$,$t$,$v$,$a$))}{$l$}
+\tadAxioma{t\'itulo(nueva($l$,$t$,$v$,$a$))}{$t$}
+\tadAxioma{vende?(nueva($l$,$t$,$v$,$a$))}{$v$}
+\tadAxioma{cantidad(nueva($l$,$t$,$v$,$a$))}{$a$}
+%\tadAxioma{cliente(nueva($l$,$t$,$v$,$a$,$c$))}{$c$}
+
+\end{tad}
