@@ -1,5 +1,6 @@
 #Temporary editors files
 *.tex~
+*.sty~
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
