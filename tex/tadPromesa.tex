@@ -38,12 +38,12 @@
 %----------------------------------------------------
 % AXIOMAS
 %----------------------------------------------------
-\tadAxiomas %[\paratodo{broker}{c, d}, \paratodo{$\alpha$}{a, b}]
-\tadAlinearAxiomas{cantidad(nueva($l$,$t$,$v$,$a$))}
-\tadAxioma{l\'imite(nueva($l$,$t$,$v$,$a$))}{$l$}
-\tadAxioma{t\'itulo(nueva($l$,$t$,$v$,$a$))}{$t$}
-\tadAxioma{vende?(nueva($l$,$t$,$v$,$a$))}{$v$}
-\tadAxioma{cantidad(nueva($l$,$t$,$v$,$a$))}{$a$}
+\tadAxiomas[\paratodo{nat}{l, c}, \paratodo{bool}{v}, \paratodo{titulo}{t}]
+\tadAlinearAxiomas{cantidad(nueva($l$,$t$,$v$,$c$))}
+\tadAxioma{l\'imite(nueva($l$,$t$,$v$,$c$))}{$l$}
+\tadAxioma{t\'itulo(nueva($l$,$t$,$v$,$c$))}{$t$}
+\tadAxioma{vende?(nueva($l$,$t$,$v$,$c$))}{$v$}
+\tadAxioma{cantidad(nueva($l$,$t$,$v$,$c$))}{$c$}
 %\tadAxioma{cliente(nueva($l$,$t$,$v$,$a$,$c$))}{$c$}
 
 \end{tad}
