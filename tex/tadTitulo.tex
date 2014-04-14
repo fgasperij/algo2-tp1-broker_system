@@ -34,10 +34,17 @@
 \tadAxiomas [\paratodo{nat}{c, m, v}, \paratodo{string}{n}, \paratodo{titulo}{t}]
 \tadAlinearAxiomas{cotizaci\'on(cambiarValor($v$,$t$))}
 
+%% Observadores
+% nombre
 \tadAxioma{nombre(nuevo($n$,$m$,$c$)))}{$n$}
+\tadAxioma{nombre(cambiarValor($v$,$t$)))}{nombre($t$)}
+% maximo
 \tadAxioma{m\'aximo(nuevo($n$,$m$,$c$)))}{$m$}
+\tadAxioma{m\'aximo(cambiarValor($v$,$t$)))}{nombre($t$)}
+% cotizacion
 \tadAxioma{cotizaci\'on(nuevo($n$,$m$,$c$))}{$c$}
 \tadAxioma{cotizaci\'on(cambiarValor($v$,$t$))}{$v$}
+% en alza
 \tadAxioma{enAlza(nuevo($n$,$m$,$c$))}{true}
 \tadAxioma{enAlza(cambiarValor($v$,$t$))}{cotizaci\'on($t$) $\textless$ $v$}
 
