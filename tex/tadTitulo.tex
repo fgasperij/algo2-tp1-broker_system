@@ -31,14 +31,14 @@
 %----------------------------------------------------
 % AXIOMAS
 %----------------------------------------------------
-\tadAxiomas %[\paratodo{broker}{c, d}, \paratodo{$\alpha$}{a, b}]
+\tadAxiomas [\paratodo{nat}{c, m, v}, \paratodo{string}{n}, \paratodo{titulo}{t}]
 \tadAlinearAxiomas{cotizaci\'on(cambiarValor($v$,$t$))}
 
-\tadAxioma{nombre(nueva($n$,$m$,$c$)))}{$n$}
-\tadAxioma{m\'aximo(nueva($n$,$m$,$c$)))}{$m$}
-\tadAxioma{cotizaci\'on(nueva($n$,$m$,$c$))}{$c$}
+\tadAxioma{nombre(nuevo($n$,$m$,$c$)))}{$n$}
+\tadAxioma{m\'aximo(nuevo($n$,$m$,$c$)))}{$m$}
+\tadAxioma{cotizaci\'on(nuevo($n$,$m$,$c$))}{$c$}
 \tadAxioma{cotizaci\'on(cambiarValor($v$,$t$))}{$v$}
-\tadAxioma{enAlza(nueva($n$,$m$,$c$))}{true}
+\tadAxioma{enAlza(nuevo($n$,$m$,$c$))}{true}
 \tadAxioma{enAlza(cambiarValor($v$,$t$))}{cotizaci\'on($t$) $\textless$ $v$}
 
 \end{tad}
