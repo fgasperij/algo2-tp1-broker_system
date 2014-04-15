@@ -116,7 +116,7 @@ FI}
 % Otras Funciones que se utilizan en las restricciones de AgPromesa
 %---------------------------------------------------------------------
 \tadAxioma{puedeVender?($c$, $p$, $b$)}{cantidad($p$) $\leq$ acciones($c$, nombre($p$), $b$)}
-\tadAxioma{HayPromMismoTipo($p$, $ps$)}{\IF vacio?($ps$) THEN false ELSE {\IF vende?(dameUno($ps$)) = vende?($p$) $\land$ \\ nombre(dameUno($ps$)) = nombre($p$) THEN true ELSE HayPromMismoTipo($p$, sinUno($ps$))FI} FI}
+\tadAxioma{HayPromMismoTipo($p$, $ps$)}{\IF vacio?($ps$) THEN false ELSE {\IF vende?(dameUno($ps$)) = vende?($p$) $\land$ \\ nombreTitulo(dameUno($ps$)) = nombreTitulo($p$) THEN true ELSE HayPromMismoTipo($p$, sinUno($ps$))FI} FI}
 \tadAxioma{estaDefinido?($n$, $ts$)}{\IF vacio?($ts$) THEN false ELSE {\IF nombre(dameUno($ts$)) = $n$ THEN true ELSE 
 estaDefinido?($n$, sinUno($ts$)) FI}FI}
 %--------------------------------------------------------------------
@@ -144,24 +144,24 @@ FI}
 % Duda: ct va entre {} ?
 \tadAxioma{cumplirVentas($ps$, $n$, $ct$)}{\IF vacio?($ps$) THEN $\emptyset$ ELSE {\IF existeVenta(dameUno($ps$), $n$, $ct$) THEN sinUno($ps$) ELSE Ag(dameUno($ps$), cumplirVentas(sinUno($ps$), $n$, $ct$)) FI} FI}
 
-\tadAxioma{existeVenta($p$, $n$, $ct$)}{vende?($p$) $\land$ nombre($p$) = $n$ $\land$ $ct$ $\textless$ limite($p$)}
+\tadAxioma{existeVenta($p$, $n$, $ct$)}{vende?($p$) $\land$ nombreTitulo($p$) = $n$ $\land$ $ct$ $\textless$ limite($p$)}
 
 \tadAxioma{accLibresDspVenta($cs$, $n$, $ct$, $a$, $b$)}{\IF vacio?($cs$) THEN $a$ ELSE {\IF vendioAcciones(promesas(dameUno($cs$), $b$), $n$, $ct$) THEN 
 nuevasAccLibres(promesas(dameUno($cs$), $b$), $n$, $ct$) +\\ accLibresDspVenta(sinUno($cs$),$n$,$ct$,$a$,$b$) ELSE accLibresDspVenta($p$,sinUno($cs$),$n$,$c$,$a$) FI} FI}
 
-\tadAxioma{vendioAcciones($ps$, $n$, $ct$)}{\IF vacio($ps$) THEN false ELSE {\IF vende?(dameUno($p$)) $\land$ nombre(dameUno($ps$)) = $n$ $\land$ \\ 
+\tadAxioma{vendioAcciones($ps$, $n$, $ct$)}{\IF vacio($ps$) THEN false ELSE {\IF vende?(dameUno($p$)) $\land$ nombreTitulo(dameUno($ps$)) = $n$ $\land$ \\ 
 limite(dameUno($ps$)) $\textless$ $ct$ THEN true ELSE vendioAcciones(sinUno($ps$),$n$,$ct$) FI} FI}
 
-\tadAxioma{nuevasAccLibres($ps$, $n$, $ct$)}{\IF vacio($ps$) THEN 0 ELSE {\IF vende?(dameUno($ps$)) $\land$ nombre(dameUno($ps$)) = $n$ $\land$ \\ 
+\tadAxioma{nuevasAccLibres($ps$, $n$, $ct$)}{\IF vacio($ps$) THEN 0 ELSE {\IF vende?(dameUno($ps$)) $\land$ nombreTitulo(dameUno($ps$)) = $n$ $\land$ \\ 
 limite(dameUno($ps$)) $\textless$ $ct$ THEN cantidad(dameUno($ps$)) ELSE nuevasAccLibres(sinUno($p$), $n$, $ct$) FI} FI}
 
 \tadAxioma{cumplirCompras($c$, $ps$, $t$, $ct$, $cs$, $a$, $b$)}{\IF dameUno($cs$) = $c$ THEN promDspDeVerSiCompro($ps$, $t$, $ct$, $a$) ELSE 
 cumplirCompras($c$, $ps$, $t$, $ct$, sinUno($cs$),\\ accDspDeComprasDeOtros(promesas(dameUno($cs$), $b$), $t$, $ct$, $a$), $b$) FI}
 
-\tadAxioma{accDspDeComprasDeOtros($ps$, $n$, $ct$, $a$)}{\IF vacio?($ps$) THEN $a$ ELSE {\IF $\neg$vende?(dameUno($ps$)) $\land$ nombre(dameUno($ps$)) = $n$ $\land$ 
+\tadAxioma{accDspDeComprasDeOtros($ps$, $n$, $ct$, $a$)}{\IF vacio?($ps$) THEN $a$ ELSE {\IF $\neg$vende?(dameUno($ps$)) $\land$ nombreTitulo(dameUno($ps$)) = $n$ $\land$ 
 limite(dameUno($ps$)) $\textless$ $ct$ THEN $a$ - cantidad($p$) ELSE accDspDeComprasDeOtros(sinUno($p$), $n$, $ct$, $a$) FI} FI}
 
-\tadAxioma{promDspDeVerSiCompro($ps$, $n$, $ct$, $a$)}{\IF vacio?($ps$) THEN $\emptyset$ ELSE {\IF $\neg$vende?(dameUno($ps$)) $\land$ nombre(dameUno($ps$)) = $n$ $\land$ 
+\tadAxioma{promDspDeVerSiCompro($ps$, $n$, $ct$, $a$)}{\IF vacio?($ps$) THEN $\emptyset$ ELSE {\IF $\neg$vende?(dameUno($ps$)) $\land$ nombreTitulo(dameUno($ps$)) = $n$ $\land$ 
 limite(dameUno($ps$)) $\textless$ $ct$ $\land$  $a \geq$ cantidad(dameUno($ps$)) THEN sinUno($ps$) ELSE 
 Ag(dameUno($ps$), promDspDeVerSiCompro(sinUno($ps$), $n$, $ct$, $a$)) FI} FI}
 
@@ -180,7 +180,7 @@ accClienteDspCompras($ps$, $t$, $ct$, $a$, $av$) ELSE accDspDeCompras($c$, $n$, 
 accDspDeComprasDeOtros(promesas(dameUno($cs$), $b$), $t$, $ct$, $av$), $b$) FI}
 
 \tadAxioma{accClienteDspCompras($ps$, $n$, $ct$, $a$, $av$)}{\IF vacio($ps$) THEN $a$ ELSE 
-{\IF $\neg$vende?(dameUno($ps$)) $\land$ nombre(dameUno($ps$)) = $n$ $\land$ limite(dameUno($ps$)) $\textless$ $c$
+{\IF $\neg$vende?(dameUno($ps$)) $\land$ nombreTitulo(dameUno($ps$)) = $n$ $\land$ limite(dameUno($ps$)) $\textless$ $c$
 $\land$ $av$ $\leq$ cantidad(dameUno($ps$)) THEN $a$ + cantidad(dameUno($ps$)) ELSE promDspDeVerSiCompro(sinUno($ps$), $n$, $ct$, $a$, $av$)FI} FI}
 
 
