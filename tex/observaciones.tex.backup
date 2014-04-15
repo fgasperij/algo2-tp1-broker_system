@@ -1,18 +1,9 @@
 \section{Observaciones}
+Las aclaraciones que nos parecen pertinente y necesario hacer son las siguientes:
+\begin{itemize}
+ \item decidimos no aceptar promesas cuya cantidad de acciones sea mayor a la que el broker pueda manejar para ese t\'itulo. Es decir, no aceptamos promesas 
+ que sabemos que nunca vamos a poder cumplir porque el m\'aximo de acciones para un t\'itulo determinado que maneja el broker es fijo.
+ \item Los TADs cliente y nombre son un renombre de String.
+\end{itemize}
 
-En este lugar vamos agregando todas las decisiones y observaciones que nos parezcan pertinentes documentar.
 
-accionesLibres: cantidad de acciones que todavía puede manejar el broker de un título determinado. Es el máximo que puede manejar el broker de ese título menos la cantidad que tienen en ese momento todos sus clientes.
-accionesTomadas: la suma total de la cantidad de acciones sobre todos los clientes para un título determinado.
-
-nuevasAccLibres: recorre el conjunto de promesas y si hay alguna de venta, sobre el título recibido como parámetro, que se pueda cumplir devuelve la 
-		 cantidad de esa promesa.
-vendióAcciones (puedeVender): recorre el conjunto de promesas y devuelve true en caso de que alguna sea de venta y pueda cumplirse.
-accLibresDespVenta: recorre el conjunto de clientes y suma la cantidad de acciones que venden las promesas que se pueden cumplir.
-
-existeVenta: devuelve true en caso de que la promesa sea de venta y se pueda cumplir con la nueva cotización del título.
-cumplirVentas: recorre las promesas. Si existe una de venta sobre el título y se puede cumplir con esa cotización la extrae del conjunto.
-
-accDspDeComprasDeOtro: 
-promDspDeVerSiCompro: 
-cumplirCompras: recorre los clientes. 
