@@ -1,14 +1,10 @@
 \section{TAD \tadNombre{T\'itulo}}
 
 \begin{tad}{\tadNombre{T\'itulo}}
-\tadIgualdadObservacional{c}{c'}{t\'itulo}{}
+\tadIgualdadObservacional{t}{t'}{t\'itulo}{$nombre(t) \igobs nombre(t') \land maximo(t) \igobs maximo(t') \land cotizacion(t) \igobs cotizacion(t') \land enAlza(t) \igobs enAlza(t')$}
 
-\tadParametrosFormales{
-    \tadEncabezadoInline{g\'eneros}{}
-}
-
-\tadGeneros{}
-\tadExporta{}
+\tadGeneros{t\'itulo}
+\tadExporta{t\'itulo, observadores}
 \tadUsa{\tadNombre{Bool, Nat}}
 
 \tadAlinearFunciones{CambiarValor}{nombre, cotizaci\'on, m\'aximo}

@@ -1,13 +1,13 @@
 \section{TAD \tadNombre{Promesa}}
 
 \begin{tad}{\tadNombre{Promesa}}
-\tadIgualdadObservacional{p}{p'}{promesa}{$nombreTitulo(p) \igobs nombreTitulo(p') \land vende?(p) \igobs vende?(p') \land cantidad(p) \igobs cantidad(p') \land limite(p) \igobs limite(p')$}
+\tadIgualdadObservacional{c}{c'}{promesa}{}
 
-\tadGeneros{promesa}
-\tadExporta{observadores}
+\tadGeneros{}
+\tadExporta{}
 \tadUsa{\tadNombre{Bool, Nat}}
 
-\tadAlinearFunciones{nombreT\'itulo}{l\'imite, t\'itulo, bool, nat ,cliente}
+\tadAlinearFunciones{cantidad }{l\'imite, t\'itulo, bool, nat ,cliente}
 
 %----------------------------------------------------
 % Observadores 
@@ -20,20 +20,26 @@
 \tadOperacion{nombreT\'itulo}{promesa}{nombre}{}
 \tadOperacion{vende?}{promesa}{bool}{}
 \tadOperacion{cantidad}{promesa}{nat}{} 
+% Lo agregamos para la igualdad observacional y poder distinguir
+% Si por ejemplo, 2 personas tratan de comprar lo mismo, con las mismas condiciones
+% El conjunto los absorveria en uno, y eso estaria mal
+%\tadOperacion{cliente}{promesa}{nat}{} 
 
 %----------------------------------------------------
 % Generadores 
 %----------------------------------------------------
 \tadGeneradores
+%Ese bool es para el observador vende?
 \tadOperacion{nueva}{l\'imite, t\'itulo, bool, nat}{promesa}{}
 %----------------------------------------------------
 % AXIOMAS
 %----------------------------------------------------
 \tadAxiomas[\paratodo{nat}{l, c}, \paratodo{bool}{v}, \paratodo{titulo}{t}]
-\tadAlinearAxiomas{nombreT\'itulo(nueva($l$,$t$,$v$,$c$))}
+\tadAlinearAxiomas{cantidad(nueva($l$,$t$,$v$,$c$))}
 \tadAxioma{l\'imite(nueva($l$,$t$,$v$,$c$))}{$l$}
 \tadAxioma{nombreT\'itulo(nueva($l$,$t$,$v$,$c$))}{$t$}
 \tadAxioma{vende?(nueva($l$,$t$,$v$,$c$))}{$v$}
 \tadAxioma{cantidad(nueva($l$,$t$,$v$,$c$))}{$c$}
+%\tadAxioma{cliente(nueva($l$,$t$,$v$,$a$,$c$))}{$c$}
 
 \end{tad}
